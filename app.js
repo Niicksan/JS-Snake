@@ -28,10 +28,9 @@ const inputSpeed = {
     x: 1,
     y: 0
 };
-let size = 3;
+let size = 1;
 
 window.addEventListener('keydown', (event) => {
-    console.log(event.key);
     if (event.key === 'ArrowUp' || event.key === 'w') {
         if (speed.y == 0) {
             inputSpeed.y = -1;
@@ -77,9 +76,11 @@ function drawGrid() {
     ctx.stroke();
 }
 
-function rect(x, y, color) {
+function rect(x, y, color, strokeColor) {
     ctx.fillStyle = color;
     ctx.fillRect(x * gridSize, y * gridSize, gridSize, gridSize);
+    ctx.strokeStyle = strokeColor;
+    ctx.strokeRect(x * gridSize, y * gridSize, gridSize, gridSize);
 }
 
 function spawnApple() {
@@ -126,6 +127,10 @@ function tick() {
         }
     }
 
+    if (tail.length == hSize * vSize - 1) {
+        win();
+    }
+
     if (snake.x == apple.x && snake.y == apple.y) {
         size++;
         currentScore += 100;
@@ -137,16 +142,25 @@ function tick() {
 function drawScene() {
     clear();
     drawGrid();
-    rect(snake.x, snake.y, 'orange');
+    rect(snake.x, snake.y, 'orange', 'orange');
     for (let segment of tail) {
-        rect(segment.x, segment.y, '#ffcc80');
+        rect(segment.x, segment.y, '#ffcc80', 'orange');
     }
-    rect(apple.x, apple.y, 'red');
+    rect(apple.x, apple.y, 'red', 'red');
 }
 
 function main() {
     tick();
     drawScene();
+}
+
+function win() {
+    clearInterval(timer);
+    const choice = confirm(`You won!\nYour score: ${currentScore}\n\nPlay again?`);
+
+    if (choice == true) {
+        start();
+    }
 }
 
 function gameOver() {
