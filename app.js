@@ -28,7 +28,7 @@ const inputSpeed = {
     x: 1,
     y: 0
 };
-let size = 1;
+let size = 3;
 
 window.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowUp' || event.key === 'w') {
